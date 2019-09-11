@@ -38,8 +38,8 @@ def create(request):
         base = "https://api.telegram.org/"
         method = "/sendMessage"
         text = "새로운 todo가 생성되었습니다."
-        url1 = base + token1 + method + "?" + "text=" + text + "&chat_id=" + chat_id1
-        url2 = base + token2 + method + "?" + "text=" + text + "&chat_id=" + chat_id2
+        url1 = base + 'bot' + token1 + method + "?" + "text=" + text + "&chat_id=" + str(chat_id1)
+        url2 = base + 'bot' + token2 + method + "?" + "text=" + text + "&chat_id=" + str(chat_id2)
         requests.get(url1)
         requests.get(url2)
 
