@@ -1,10 +1,53 @@
 {% extends 'todos/base.html' %}
 
 {% block body %}
-  <h1>여기는 인덱스입니다</h1>
-  {% for todo in todos %}
-  <li>{{ todo.due_date }} : {{ todo.title }}</li>
-  <a href="{% url 'todos:update' todo.id %}">수정</a>
-  <a href="{% url 'todos:delete' todo.id %}">삭제</a>
-  {% endfor %}
+<div class="container">
+  <div class="row">
+    <h2>Kahn & YJK의 짭 WUNDERLIST</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">번호</th>
+          <th scope="col">스케줄</th>
+          <th scope="col">마감일</th>
+          <th scope="col">일정편집/삭제</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for todo in todos %}
+        <tr>
+          <th scope="row">{{ todo.id }}</th>
+          <td>{{ todo.title }}</td>
+          <td>{{ todo.due_date }}</td>
+          <td><a class="btn btn-info" href="{% url 'todos:update' todo.id %}">수정</a> <button type="button" class="btn btn-danger"
+              data-toggle="modal" data-target="#delete">삭제</button></td>
+          <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">삭제 가즈아~!</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  정말 삭제할꼬야?
+                </div>
+                <div class="modal-footer">
+                  <a href="{% url 'todos:delete' todo.id %}" class="btn btn-danger">삭제</a>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+    <a class="btn btn-secondary" href="{% url 'todos:create' %}">스케줄 추가</a>
+  </div>
+</div>
 {% endblock %}
