@@ -1,0 +1,10 @@
+{% extends 'todos/base.html' %}
+{% block body %}
+<h1>여기는 편집하는 곳입니다.</h1>
+<form action="{% url 'todos:update' todo.id %}" method="post">
+  {% csrf_token %}
+  <input type="text" name="title" value="{{ todo.title }}" placeholder="할 일을 적어주세요">
+  <input type="date" name="due-date" value="{{ todo.due_date|date:'Y-m-d' }}">
+  <input type="submit">
+</form>
+{% endblock %}
