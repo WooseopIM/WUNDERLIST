@@ -1,7 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Todo
+import requests
+from decouple import config
+
+token1 = config('TELEGRAM_TOKEN1')
+token2 = config('TELEGRAM_TOKEN2')
+
 
 # Create your views here.
+
 
 def index(request):
     todos = Todo.objects.all()
@@ -10,6 +17,7 @@ def index(request):
     }
     return render(request, 'todos/index.html', context)
 
+
 def create(request):
     # data 가져오기
     if request.method == 'POST':
@@ -17,11 +25,27 @@ def create(request):
         due_date = request.POST.get('due-date')
 
         Todo.objects.create(title=title, due_date=due_date)
+        
+        url1 = "https://api.telegram.org/bot" + token1 + "/getUpdates"
+        url2 = "https://api.telegram.org/bot" + token2 + "/getUpdates"
+        res1 = requests.get(url1)
+        res2 = requests.get(url2)
+        dict_result1 = res1.json()
+        dict_result2 = res2.json()
+        chat_id1 = dict_result1["result"][0]["message"]["from"]["id"]
+        chat_id2 = dict_result2["result"][0]["message"]["from"]["id"]
+        
+        base = "https://api.telegram.org/"
+        method = "/sendMessage"
+        text = "새로운 todo가 생성되었습니다."
+        url1 = base + token1 + method + "?" + "text=" + text + "&chat_id=" + chat_id1
+        url2 = base + token2 + method + "?" + "text=" + text + "&chat_id=" + chat_id2
+        requests.get(url1)
+        requests.get(url2)
+
         return redirect('todos:index')
     else:
         return render(request, 'todos/create.html')
-
-
 
 def update(request, pk):
     todo = get_object_or_404(Todo, id=pk)
