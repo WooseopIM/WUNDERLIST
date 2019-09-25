@@ -15,8 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from decouple import config
+from todos import views
+
+token = config('TELEGRAM_TOKEN1')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('todos/', include('todos.urls')),
+    path(f'{token}/', views.telegram),
 ]

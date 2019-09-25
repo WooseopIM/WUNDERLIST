@@ -1,7 +1,9 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from .models import Todo
 import requests
 from decouple import config
+import json
+from django.views.decorators.csrf import csrf_exempt
 
 token1 = config('TELEGRAM_TOKEN1')
 token2 = config('TELEGRAM_TOKEN2')
@@ -73,3 +75,11 @@ def delete(request,pk):
     todo = get_object_or_404(Todo, id=pk)
     todo.delete()
     return redirect('todos:index')
+
+@csrf_exempt
+def telegram(request):
+    print(request.method)
+    res = json.loads(request.body)
+
+    print(request)
+    return HttpResponse('아무메세지')
